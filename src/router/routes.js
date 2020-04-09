@@ -13,6 +13,7 @@ export default [
     component : Home
   },
   {
+    name:'search',
     path:'/search/:keyword?',
     component : Search
   },

@@ -16,10 +16,7 @@
     <Like/>
 
     <!--楼层-->
-    <Floor/>
-
-    <!--楼层-->
-    <Floor/>
+    <Floor v-for="f in floors" :key="f.id" :f="f"/>
 
     <!--商标-->
     <Brand/>
@@ -28,6 +25,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import TypeNav from '../../components/TypeNav'
   import TodayRecommend from './TodayRecommend'
   import ListContainer from './ListContainer'
@@ -40,6 +38,15 @@
     name: "Home",
     data() {
       return {};
+    },
+    mounted() {
+      this.$store.dispatch("getBanners");
+      this.$store.dispatch('getFloors')
+    },
+    computed: {
+      ...mapState({
+        floors:state => state.home.floors
+      })
     },
     components:{
       TypeNav,

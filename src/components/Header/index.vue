@@ -51,16 +51,40 @@ export default {
        keyword:''
    }
  },
+ mounted() {
+     this.$bus.$on('deleteKeyword',()=>{
+         this.keyword = ''
+     })
+ },
  methods: {
    toSearch(){
     //  this.$router.push(`/search?keyword=${this.keyword}`)
     //  this.$router.push({path : '/search' , query : {keyword : this.keyword}})
     // this.$router.push(`/search/${this.keyword}`)
-    if(this.keyword){
-        this.$router.push({name : 'search' , params : {keyword : this.keyword}})
-    }else{
-        this.$router.push({name : 'search'})
-    }
+        const {path , query} = this.$route
+        if(this.keyword){
+
+            if(path.indexOf('/search') === 0){
+                this.$router.push({
+                    name : 'search',
+                    params : {keyword : this.keyword},
+                    query
+                })
+            }else{
+                this.$router.push({name : 'search' , params : {keyword : this.keyword}})
+            }
+
+        }else{
+
+            if(path.indexOf('/search') === 0){
+                this.$router.push({
+                    name : 'search',
+                    query
+                })
+            }else{
+                this.$router.push({name : 'search'})
+            }
+        }
    }
  },
 }

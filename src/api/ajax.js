@@ -3,7 +3,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const service = axios.create({
-  baseURL : "./api",
+  baseURL : "/api",
   timeout : 15000
 })
 

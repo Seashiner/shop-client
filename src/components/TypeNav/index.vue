@@ -60,7 +60,9 @@ export default {
    }
  },
  mounted(){
-    
+    if(this.$route.path !== '/'){
+       this.isShowFirst = false
+     }
  },
  methods: {
    showCategory:debounce(function(index){
@@ -78,9 +80,9 @@ export default {
    },
 
    toSearch(event){
-     const {categoryname,categoryid ,categoryid2,categoryid3} = event.target.dataset
-     console.dir(event.target.dataset);
-     if(categoryname){
+    const {categoryname,categoryid ,categoryid2,categoryid3} = event.target.dataset
+    //  console.dir(event.target.dataset);
+    if(categoryname){
        const query = {categoryName : categoryname}
 
        if(categoryid){
@@ -91,8 +93,17 @@ export default {
          query.categoryId3 = categoryid3
        }
       this.isShowFirst = false
-      this.$router.push({path:'/search' ,query})
-     }
+
+
+      const path = this.$route.path
+      //路径需要有query 和 params
+      if(path.indexOf('/search') === 0){
+        //如果已经在搜索界面
+        this.$router.replace({path ,query})//replace不会向history里面添加新的记录，点击返回，会跳转到上上一个页面。
+      }else{
+        this.$router.push({path:'/search' ,query})
+      }
+    }
 
    }
  },

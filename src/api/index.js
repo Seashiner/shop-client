@@ -12,12 +12,7 @@ export const reqBanners = () => ajaxMock.get('/banners')
 
 export const reqFloors = () => ajaxMock.get('/floors')
 
+export const reqSearch = (searchParams) => ajax.post('/list' , searchParams)
 
-
-
-
-
-
-
-
+export const reqDetailInfo = (skuId) => ajax.get(`/item/${skuId}`)
 

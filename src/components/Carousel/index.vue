@@ -1,7 +1,7 @@
 <template>
   <div class="swiper-container" ref = "swiper">
     <div class="swiper-wrapper">
-      <div class="swiper-slide" v-for="(item, index) in carouselList" :key="item.id">
+      <div class="swiper-slide" v-for="item in carouselList" :key="item.id">
         <img :src="item.imgUrl" />
       </div>
     </div>
@@ -26,15 +26,15 @@ export default {
    return{}
  },
   mounted() {
-   console.log('mounted',this.carouselList.length);
+  //  console.log('mounted',this.carouselList.length);
  },
  watch: {
     carouselList :{
       handler :function() {
         // if(this.carouselList.length === 0) return
-        console.log('watch',this.carouselList.length);
+        // console.log('watch',this.carouselList.length);
         this.$nextTick(()=>{
-          var mySwiper = new Swiper (this.$refs.swiper, {
+          new Swiper (this.$refs.swiper, {
             loop: true, // 循环模式选项
             autoplay:true,
             // 如果需要分页器

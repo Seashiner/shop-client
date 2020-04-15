@@ -1,17 +1,56 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="mask"></div>
+    <img :src="imgUrl" />
+    <div class="event"  @mousemove="handleMove" ref = "event"></div>
     <div class="big">
-      <img src="../images/s1.png" />
+      <img :src="bigImgUrl" ref="bigImg"/>
     </div>
-    <div class="small"></div>
+    <div class="mask" ref= "mask"></div>
   </div>
 </template>
 
 <script>
   export default {
     name: "Zoom",
+    props:{
+      imgUrl : String,
+      bigImgUrl : String
+    },
+    mounted() {
+      //单独定义一个maskWidth属性，这句话写在handleMove函数里也能正常执行
+      this.maskWidth = this.$refs.event.clientWidth /2
+    },
+    methods: {
+      handleMove(event){
+        const {offsetX , offsetY} = event
+        const maskWidth = this.maskWidth
+        let left = offsetX - maskWidth/2
+        let top = offsetY - maskWidth/2
+
+        if(left<0){
+          left=0
+        }else if(left>maskWidth){
+          left=maskWidth
+        }
+
+        if(top<0){
+          top=0
+        }else if(top>maskWidth){
+          top=maskWidth
+        }
+
+        const maskDiv = this.$refs.mask;
+        
+        maskDiv.style.top = top + 'px'
+        maskDiv.style.left = left + 'px'
+
+        const imgDiv = this.$refs.bigImg;
+        imgDiv.style.top = -2*top + 'px'
+        imgDiv.style.left = -2*left + 'px'
+
+      }
+
+    },
   }
 </script>
 
@@ -24,7 +63,7 @@
       height: 100%
     }
 
-    .mask {
+    .event {
       width: 100%;
       height: 100%;
       position: absolute;
@@ -33,7 +72,7 @@
       z-index: 999;
     }
 
-    .small {
+    .mask {
       width: 50%;
       height: 50%;
       background-color: rgba(0, 255, 0, 0.3);
@@ -64,8 +103,8 @@
       }
     }
 
-    .mask:hover~.small,
-    .mask:hover~.big {
+    .event:hover~.mask,
+    .event:hover~.big {
       display: block;
     }
   }

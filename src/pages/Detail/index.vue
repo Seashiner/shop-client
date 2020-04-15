@@ -16,9 +16,12 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom v-if="skuImageList.length>0"
+                :imgUrl = "skuImageList[currentIndex].imgUrl"
+                :bigImgUrl = "skuImageList[currentIndex].imgUrl"
+          />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList @changeCurrentIndex="changeCurrentIndex"/>
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -63,12 +66,12 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl v-for="(spuSale, index) in spuSaleAttrList" :key="spuSale.baseSaleAttrId">
+              <dl v-for="spuSale in spuSaleAttrList" :key="spuSale.id">
                 <dt class="title">{{spuSale.saleAttrName}}</dt>
                 <dd changepirce="0" 
                 :class="{active:spu.isChecked === '1'}" 
-                v-for="(spu, index) in spuSale.spuSaleAttrValueList" 
-                :key="spu.baseSaleAttrId" 
+                v-for="spu in spuSale.spuSaleAttrValueList" 
+                :key="spu.id" 
                 @click="selectSpu(spu,spuSale.spuSaleAttrValueList)"
                 >
                 {{spu.saleAttrValueName}}
@@ -95,11 +98,11 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt">
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum">
+                <a href="javascript:" class="plus" @click="plus">+</a>
+                <a href="javascript:" class="mins" @click="mins">-</a>
               </div>
-              <div class="add">
+              <div class="add" @click="addToCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -139,7 +142,9 @@
                     <i>6088.00</i>
                   </div>
                   <div class="operate">
-                    <a href="javascript:void(0);">加入购物车</a>
+                    <a href = "javascript:;">
+                      加入购物车
+                      </a>
                   </div>
                 </div>
               </li>
@@ -357,12 +362,18 @@
 
   export default {
     name: 'Detail',
-    
+    data(){
+      return{
+        currentIndex : 0,
+        imgUrl : '',
+        bigImgUrl : '',
+        skuNum:1
+      }
+    },
     components: {
       ImageList,
       Zoom
     },
-
     computed: {
       ...mapState({
         detailInfo: state => state.detail.detailInfo
@@ -374,6 +385,41 @@
       this.$store.dispatch('getDetailInfo',skuId)
     },
     methods: {
+      mins(){
+        if(this.skuNum > 1){
+          this.skuNum--
+        }
+      },
+      plus(){
+        this.skuNum++
+      },
+      async addToCart () {
+        const query = {skuId: this.skuInfo.id, skuNum: this.skuNum}
+        // 分发添加购物车的action
+        // this.$store.dispatch('addToCart', {...query, callback: this.callback})
+        const errorMsg = await this.$store.dispatch('addToCart', query)
+        this.callback(errorMsg)
+      },
+      // addToCart () {
+      //   const query = {skuId: this.skuInfo.id, skuNum: this.skuNum}
+      //   // 分发添加购物车的action
+      //   this.$store.dispatch('addToCart', {...query, callback: this.callback})
+      // },
+      callback(errMsg){
+        const query = {skuId : this.skuInfo.id , skuNum : this.skuNum}
+
+        if(!errMsg){
+
+          window.sessionStorage.setItem('SKU_INFO_KEY',JSON.stringify(this.skuInfo))
+
+          this.$router.push({path:'/addCartSuccess', query})
+        }else{
+          alert(errMsg)
+        }
+      },
+      changeCurrentIndex(index){
+        this.currentIndex = index
+      },
       selectSpu(value,list){
         if(value.isChecked !== '1'){
           list.forEach((v)=>{

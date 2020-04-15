@@ -14,7 +14,7 @@
           <li class="with-x" v-if="options.trademark">{{options.trademark}}<i @click='deleteTrademark'>×</i></li>
           <li class="with-x" v-if="options.keyword">{{options.keyword}}<i @click='deleteKeyword'>×</i></li>
 
-          <li class="with-x" v-if="options.props" v-for="(prop, index) in options.props" :key="index">{{prop}}<i @click='deleteprop(index)'>×</i></li>
+          <li class="with-x" v-for="(prop, index) in options.props" :key="index">{{prop}}<i @click='deleteprop(index)'>×</i></li>
         </ul>
       </div>
       <!--selector-->
@@ -252,7 +252,7 @@ export default {
   },
   watch: {
     '$route':{
-      handler:function(to , from){
+      handler:function(to ){
         const {query , params} = to;
         console.log(to.params);
         const options = {

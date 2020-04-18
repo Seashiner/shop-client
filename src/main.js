@@ -7,7 +7,10 @@ import Carousel from './components/Carousel/index.vue'
 import Pagination from './components/Pagination/index.vue'
 import './mock/mokeServer.js'
 import "swiper/css/swiper.min.css";
+import * as API from './api'
+import './element'
 
+Vue.prototype.$API = API
 
 Vue.config.productionTip = false
 Vue.component('TypeNav' , TypeNav)

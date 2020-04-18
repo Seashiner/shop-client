@@ -5,14 +5,20 @@
         <div class="container">
             <div class="loginList">
                 <p>尚品汇欢迎您！</p>
-                <p>
+                <!-- 登录成功 -->
+                <p v-if="userInfo.name">
+                    <span>{{userInfo.name}}</span>
+                    <a href = "javascript:;" @click="logout">退出登录</a>
+                </p>
+                <!-- 未登录 -->
+                <p v-if="!userInfo.name">
                     <span>请</span>
                     <router-link to='/login'>登录</router-link>
                     <router-link to='/register' class="register">免费注册</router-link>
                 </p>
             </div>
             <div class="typeList">
-                <a href="###">我的订单</a>
+                <router-link to="/center">我的订单</router-link>
                 <a href="###">我的购物车</a>
                 <a href="###">我的尚品汇</a>
                 <a href="###">尚品汇会员</a>
@@ -44,6 +50,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
  name:'Header',
  data(){
@@ -56,7 +63,21 @@ export default {
          this.keyword = ''
      })
  },
+ computed: {
+      ...mapState({
+        userInfo : state => state.user.userInfo
+      })
+    },
  methods: {
+     async logout(){
+        try {
+          await this.$store.dispatch('reqLogout')
+          this.$router.replace('/')
+          console.log('111');
+        } catch (error) {
+          alert(error.message)
+        }
+      },
    toSearch(){
     //  this.$router.push(`/search?keyword=${this.keyword}`)
     //  this.$router.push({path : '/search' , query : {keyword : this.keyword}})

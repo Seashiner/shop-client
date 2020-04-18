@@ -3,11 +3,13 @@ import user from './user'
 import search from './search'
 import detail from './detail'
 import shopcart from './shopcart'
+import order from './order'
 
 export default {
   home,
   user,
   search,
   detail,
-  shopcart
+  shopcart,
+  order
 }

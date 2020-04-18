@@ -14,14 +14,14 @@
           </ul>
 
           <div class="content">
-            <form ref="form" action="/home">
+            <form ref="form" action="##">
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" ref="mobile">
+                <input type="text" placeholder="邮箱/用户名/手机号" v-model="mobile">
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" ref="password">
+                <input type="text" placeholder="请输入密码" v-model="password">
               </div>
               <div class="setting clearFix">
                 <!-- <label class="checkbox inline">
@@ -30,7 +30,7 @@
                 </label> -->
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click.prevent="login">登&nbsp;&nbsp;录</button>
             </form>
 
             <div class="call clearFix">
@@ -66,23 +66,22 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   export default {
     name: 'Login',
-    computed: {
-      ...mapState({
-        userInfo : state => state.user.userInfo
-      })
+    data(){
+      return{
+        mobile:'',
+        password:''
+      }
     },
+    
     methods: {
       async login(){
-        const mobile = this.$refs.mobile.value
-        const password = this.$refs.password.value
-
+        const {mobile , password} = this
         try {
           await this.$store.dispatch('reqLogin',{mobile,password})
-          // this.$refs.form.action="/home"
-          alert('成功')
+          const {redirect} = this.$route.query
+          this.$router.replace(redirect || "/")
         } catch (error) {
           alert(error.message)
         }

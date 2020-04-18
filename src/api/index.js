@@ -32,11 +32,21 @@ export const reqLogin = (mobile,password) => ajax.post(`/user/passport/login`,{m
 //退出登录
 export const reqLogout = () => ajax.get(`/user/passport/logout`)
 
-
-
-
-
-
+//获取订单交易页信息
+export const reqTrade = () => ajax.get(`/order/auth/trade`)
+//获取我的订单列表
+export const reqMyOrder = (page,limit) => ajax.get(`/order/auth/${page}/${limit}`)
+//提交订单
+export const reqSubmitOrder = (tradeNo,orderInfo) => ajax({
+  url:"/order/auth/submitOrder",
+  method : 'post',
+  params : { tradeNo },
+  data : orderInfo
+})
+//获取订单支付信息
+export const reqPayment = (orderId) => ajax.get(`payment/weixin/createNative/${orderId}`)
+//查询订单支付信息
+export const reqPayStatus = (orderId) => ajax.get(`payment/weixin/queryPayStatus/${orderId}`)
 
 
 

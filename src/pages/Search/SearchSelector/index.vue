@@ -254,7 +254,7 @@ export default {
     '$route':{
       handler:function(to ){
         const {query , params} = to;
-        console.log(to.params);
+        // console.log(to.params);
         const options = {
         ...this.options,
         categoryId: '' ,//一级分类ID
